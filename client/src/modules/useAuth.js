@@ -4,6 +4,11 @@ import { api } from '../services/api'
 
 export const useAuth = (allowVerifyAuth = false) => {
     let isAuthenticated = ref(false)
+    let isLoading = ref(false)
+
+    const setIsLoading = (value) => {
+        isLoading.value = value
+    }
 
     const signIn = async (username, password) => {
         try {
@@ -33,6 +38,7 @@ export const useAuth = (allowVerifyAuth = false) => {
 
     const verifyIsUserAuthenticated = async () => {
         try {
+            setIsLoading(true)
             const token = getToken()
 
             if (!token) throw new Error('Usuário não autenticado')
@@ -40,12 +46,13 @@ export const useAuth = (allowVerifyAuth = false) => {
             const isAuth = await api.get('/isAuthenticated', { headers: { 'Authorization': 'Bearer ' + token }})
             
             isAuthenticated.value = isAuth.data.authenticated
-
+            setIsLoading(false)
         } catch (e) {
             const message = e.response?.data?.message || e.message
             console.log(message)
+            setIsLoading(false)
         }
     }
 
-    return !allowVerifyAuth ? { isAuthenticated, signIn, signOut, getToken } : { isAuthenticated, signIn, signOut, getToken, verifyIsUserAuthenticated }
+    return !allowVerifyAuth ? { isAuthenticated, isLoading, setIsLoading, signIn, signOut, getToken } : { isAuthenticated, isLoading, setIsLoading, signIn, signOut, getToken, verifyIsUserAuthenticated }
 }

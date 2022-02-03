@@ -43,9 +43,15 @@ routes.get('/secret-information', checkAuth, (req, res) => {
 })
 
 routes.get('/isAuthenticated', checkAuth, (req, res) => {
-    res.status(200).json({
-        authenticated: true
-    })
+    // res.status(200).json({
+    //     authenticated: true
+    // })
+
+    setTimeout(() => {
+        res.status(200).json({
+            authenticated: true
+        })
+    }, 5000)
 })
 
 module.exports = routes;

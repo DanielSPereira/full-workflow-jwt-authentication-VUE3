@@ -1,4 +1,5 @@
 <script setup>
+import PrivateRoute from "../components/PrivateRoute.vue"
 import { onMounted, ref } from 'vue'
 import { api } from '../services/api'
 import { useAuth } from '../modules/useAuth'
@@ -20,7 +21,7 @@ onMounted(async () => {
     } catch (e) {
         const message = e.response?.data?.message || e.message
         
-        alert(message)
+        console.log(message)
 
         secret.value = ref(message)
     }
@@ -28,7 +29,11 @@ onMounted(async () => {
 </script>
 
 <template>
-    <h1>Secret</h1>
-    <h3>{{ secret }}</h3>
-    <input @click="signOut" type="button" value="sair">
+    <PrivateRoute>
+        <div>
+            <h1>Secret</h1>
+            <h3>{{ secret }}</h3>
+            <input @click="signOut" type="button" value="sair">
+        </div>
+    </PrivateRoute>
 </template>

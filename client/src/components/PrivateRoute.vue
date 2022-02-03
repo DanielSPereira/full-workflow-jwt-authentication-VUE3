@@ -1,6 +1,6 @@
 <script>
 import { useAuth } from '../modules/useAuth'
-import { watchEffect, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const { isAuthenticated, isLoading, setIsLoading, verifyIsUserAuthenticated } = useAuth(true)
@@ -11,12 +11,9 @@ export default {
         
         if (!isAuthenticated.value) {
             onMounted(async () => {
-
                 await verifyIsUserAuthenticated()
 
                 if (!isAuthenticated.value) return router.push('login')
-
-                watchEffect(() => console.log('isloading: ', isLoading.value, 'isauhtenticated: ', isAuthenticated.value))
             })
         }
 
